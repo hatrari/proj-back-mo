@@ -12,23 +12,44 @@
   <div id="pseudo-existe-deja" class="displayNone">
     pseudo-existe-deja.
   </div>
+
   <div id="form-pseudo">
     <p>choisez un pseudonyme :</p>
     <input type="text" id="name" />
     <button id="seconnecter">Se connecter</button>
   </div>
+
   <div id="message-si-liste-vide" class="displayNone">
     Aucun utilisateurs n'est connectes.
   </div>
+
   <ul id="list-users"></ul>
+
   <div id="message-viens-jour"></div>
-  <div id="jeu" class="displayNone">
-    <div id="form-jeu">
-      <p>Proposez une lettre :</p>
-      <input type="text" id="lettreProposee" />
-      <button id="envoyerLettreProposee">envoyer</button>
-    </div>
+
+  <div id="form-pour-proposer" class="displayNone" >
+    <p>Proposez une lettre :</p>
+    <input type="text" id="lettreProposee" />
+    <button id="envoyerLettreProposee">envoyer</button>
   </div>
+
+  <div id="form-pour-deviner" class="displayNone">
+    <p>
+      Deviner le numero correspondant a la lettre
+      <b id="lettreProposeeParAutre"></b>:
+    </p>
+    <input type="text" id="lettreProposee" />
+    <button id="envoyerLettreProposee">envoyer</button>
+  </div>
+
+  <div id="attendreProposition" class="displayNone">
+    Attendez la proposition...
+  </div>
+
+  <div id="attendreReponse" class="displayNone">
+    Attendez la reponse...
+  </div>
+
   <script src="./script.js"></script>
 </body>
 </html>

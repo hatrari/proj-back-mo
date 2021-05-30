@@ -1,3 +1,4 @@
+const LETTRES = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 const URL_API = "http://192.168.1.186:3000"
 let myUserName = "";
 let suisJeConnecte = false;
@@ -10,24 +11,6 @@ socket.on("userdisconnect", () => {
 
 socket.on("userconnect", () => {
   if(suisJeConnecte) updateListUsers();
-});
-
-socket.on("vient-jouer", (msg) => {
-  let message = document.querySelector("#message-viens-jour");
-  if(msg.expediteur !== socket.id && suisJeConnecte) {
-    let compteur = 5;
-    let intervalId = setInterval(() => {
-      if(compteur == 1) clearInterval(intervalId);
-      compteur--;
-      message.innerHTML = `${msg.expediteurName} vous invite a jouer. <br>
-      la partie commence dans <span>${compteur}</span>s`;
-    }, 1000);
-    setTimeout(() => {
-      document.querySelector("#list-users").style.display = "none";
-      document.querySelector("#jeu").style.display = "block";
-      message.innerHTML = "";
-    }, 5000);
-  }
 });
 
 let btnSeConnecter = document.querySelector("#seconnecter");
@@ -49,6 +32,14 @@ btnSeConnecter.addEventListener("click", () => {
       suisJeConnecte = true;
       document.querySelector("#form-pseudo").style.display = "none";
       socket.emit("userconnect");
+      fetch(URL_API)
+      .then(res => res.json())
+      .then(users => {
+        if(myUserName !== "") {
+          users = users.filter(user => user.name !== myUserName);
+        }
+        viensJouer(users);
+      });
     } else {
       document.querySelector('#pseudo-existe-deja').style.display = "block";
     }
@@ -64,8 +55,8 @@ function updateListUsers() {
     if(myUserName !== "") {
       users = users.filter(user => user.name !== myUserName);
     }
+    utilisateursConnectes = users;
     users = users.filter(user => user.name !== user.socketId);
-    viensJouer(users);
     if(users.length == 0) {
       document.querySelector("#message-si-liste-vide").style.display = "block";
     } else {
@@ -84,15 +75,48 @@ function cacherMessage() {
 
 
 function viensJouer(users) {
-  let userConnected = users.filter(u => u.isConnected === true)[0];
+  let message = document.querySelector("#message-viens-jour");
+  let userConnected = users.filter(user => user.isConnected === true)[0];
   if(userConnected?.isConnected && suisJeConnecte) { // ecarter undefined et null + verifier si isConnected existe + moi je suis connecte
     socket.emit("vient-jouer", {
       expediteur: socket.id,
       expediteurName: myUserName,
       recepteur: userConnected.socketId,
     });
+    let compteur = 5;
+    message.innerHTML = `La partie commence dans <span>${compteur}</span>s`;
+    let intervalId = setInterval(() => {
+      if(compteur == 1) clearInterval(intervalId);
+      compteur--;
+      message.innerHTML = `La partie commence dans <span>${compteur}</span>s`;
+    }, 1000);
+    setTimeout(() => {
+      document.querySelector("#list-users").style.display = "none";
+      document.querySelector("#attendreProposition").style.display = "block";
+      message.innerHTML = "";
+    }, 5000);
   }
 }
+
+socket.on("vient-jouer", (msg) => {
+  let message = document.querySelector("#message-viens-jour");
+  if(msg.expediteur !== socket.id && suisJeConnecte) {
+    let compteur = 5;
+    message.innerHTML = `${msg.expediteurName} vous invite a jouer. <br>
+    la partie commence dans <span>${compteur}</span>s`;
+    let intervalId = setInterval(() => {
+      if(compteur == 1) clearInterval(intervalId);
+      compteur--;
+      message.innerHTML = `${msg.expediteurName} vous invite a jouer. <br>
+      la partie commence dans <span>${compteur}</span>s`;
+    }, 1000);
+    setTimeout(() => {
+      document.querySelector("#list-users").style.display = "none";
+      document.querySelector("#form-pour-proposer").style.display = "block";
+      message.innerHTML = "";
+    }, 5000);
+  }
+});
 
 let btnEnvoyerLettreProposee = document.querySelector("#envoyerLettreProposee");
 
@@ -102,10 +126,14 @@ btnEnvoyerLettreProposee.addEventListener("click", () => {
     expediteur: socket.id,
     lettreProposee: lettreProposee
   });
+  document.querySelector("#form-pour-proposer").style.display = "none";
+  document.querySelector("#attendreReponse").style.display = "block";
 });
 
 socket.on("proposer-lettre", (msg) => {
   if(msg.expediteur !== socket.id) {
-    console.log(msg.lettreProposee)
+    document.querySelector("#attendreProposition").style.display = "none";
+    document.querySelector("#form-pour-deviner").style.display = "block";
+    document.querySelector("#lettreProposeeParAutre").innerHTML = msg.lettreProposee.toLowerCase();
   }
 });
