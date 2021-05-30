@@ -29,12 +29,15 @@ const User = require('./models/user');
 socketio.on('connection', (socket) => {
   let user = new User({
     socketId: socket.id,
-    name: socket.id,
-    isConnected: true
+    name: socket.id
   });
   user.save();
   socket.on('userconnect', () => {
     socketio.emit('userconnect');
+  });
+  socket.on('vient-jouer', (msg) => {
+    console.log(msg)
+    socketio.emit('vient-jouer', msg);
   });
   socket.on('disconnect', () => {
     User.findOne({ socketId: socket.id }, (err, user) => {

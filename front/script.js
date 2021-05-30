@@ -1,3 +1,6 @@
+let myUserName = "";
+let suisJeConnecte = false;
+
 const socket = io.connect("http://localhost:3000");
 
 socket.on("userdisconnect", () => {
@@ -5,10 +8,12 @@ socket.on("userdisconnect", () => {
 });
 
 socket.on("userconnect", () => {
-  updateListUsers();
+  if(suisJeConnecte) updateListUsers();
 });
 
-let myUserName;
+socket.on("vient-jouer", (msg) => {
+  console.log(msg)
+});
 
 let btnSeConnecter = document.querySelector("#seconnecter");
 
@@ -26,6 +31,7 @@ btnSeConnecter.addEventListener("click", () => {
   })
   .then((dataRecuDuServeur) => {
     if (dataRecuDuServeur.status == 201) {
+      suisJeConnecte = true;
       document.querySelector("#form-pseudo").style.display = "none";
       socket.emit("userconnect");
     } else {
@@ -44,6 +50,7 @@ function updateListUsers() {
       users = users.filter(user => user.name !== myUserName);
     }
     users = users.filter(user => user.name !== user.socketId);
+    viensJouer(users);
     if(users.length == 0) {
       document.querySelector("#message-si-liste-vide").style.display = "block";
     } else {
@@ -58,4 +65,11 @@ function updateListUsers() {
 function cacherMessage() {
   document.querySelector("#pseudo-existe-deja").style.display = "none";
   document.querySelector("#message-si-liste-vide").style.display = "none";
+}
+
+function viensJouer(users) {
+  let userConnected = users.filter(u => u.isConnected === true)[0];
+  if(userConnected?.isConnected && suisJeConnecte) { // ecarter undefined et null + verifier si isConnected existe + moi je suis connecte
+    socket.emit("vient-jouer", {expediteur: socket.id, recepteur: userConnected.socketId});
+  }
 }
