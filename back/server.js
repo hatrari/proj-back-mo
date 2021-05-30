@@ -41,6 +41,12 @@ socketio.on('connection', (socket) => {
   socket.on('proposer-lettre', (msg) => {
     socketio.emit('proposer-lettre', msg);
   });
+  socket.on('proposer-numero', (msg) => {
+    socketio.emit('proposer-numero', msg);
+  });
+  socket.on('afficher-resultat', (msg) => {
+    socketio.emit('afficher-resultat', msg);
+  });
   socket.on('disconnect', () => {
     User.findOne({ socketId: socket.id }, (err, user) => {
       if(!user) return;

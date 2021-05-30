@@ -3,6 +3,7 @@ const URL_API = "http://192.168.1.186:3000"
 let myUserName = "";
 let suisJeConnecte = false;
 let myScore = 0;
+let nombreReponse = 0;
 
 const socket = io.connect(URL_API);
 
@@ -153,5 +154,61 @@ socket.on("proposer-lettre", (msg) => {
     document.querySelector("#attendreProposition").style.display = "none";
     document.querySelector("#form-pour-deviner").style.display = "block";
     document.querySelector("#lettreProposeeParAutre").innerHTML = msg.lettreProposee.toLowerCase();
+  }
+});
+
+let btnEnvoyerNumeroPropose = document.querySelector("#envoyerNumeroPropose");
+
+btnEnvoyerNumeroPropose.addEventListener("click", () => {
+  nombreReponse++;
+  let numeroPropose = document.querySelector("#numeroPropose").value;
+  let lettreADeviner = document.querySelector("#lettreProposeeParAutre").innerText;
+  let index = parseInt(numeroPropose) - 1;
+  if(LETTRES[index] == lettreADeviner) {
+    myScore++;
+    document.querySelector("#scoreJoueur").innerHTML = `
+      Score: ${myScore}
+    `;
+  }
+  socket.emit("proposer-numero", {
+    expediteur: socket.id,
+    expediteurName: myUserName,
+    score: myScore,
+    nombreReponseAdversaire: nombreReponse
+  });
+  document.querySelector("#form-pour-deviner").style.display = "none";
+  document.querySelector("#form-pour-proposer").style.display = "block";
+});
+
+socket.on("proposer-numero", (msg) => {
+  if(msg.expediteur !== socket.id) {
+    if(msg.nombreReponseAdversaire  > 0 && nombreReponse == msg.nombreReponseAdversaire) {
+      if(msg.score > myScore) {
+        socket.emit("afficher-resultat", {
+          gagnant: msg.expediteur
+        });
+      } else if(msg.score < myScore) {
+        socket.emit("afficher-resultat", {
+          gagnant: socket.id
+        });
+      }
+    }
+    let infoAdversaire = `
+      <div>Name: ${msg.expediteurName}</div>
+      <div id="scoreAdversaire">Score: ${msg.score}</div>
+    `;
+    document.querySelector("#infoAdversaire").innerHTML = infoAdversaire;
+    document.querySelector("#attendreProposition").style.display = "block";
+    document.querySelector("#attendreReponse").style.display = "none";
+  }
+});
+
+socket.on("afficher-resultat", (msg) => {
+  document.querySelector("#attendreProposition").style.display = "none";
+  document.querySelector("#form-pour-proposer").style.display = "none";
+  if(msg.gagnant == socket.id) {
+    document.querySelector("#messageGagner").style.display = "block";
+  } else {
+    document.querySelector("#messagePerdre").style.display = "block";
   }
 });
