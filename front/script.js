@@ -185,11 +185,17 @@ socket.on("proposer-numero", (msg) => {
     if(msg.nombreReponseAdversaire  > 0 && nombreReponse == msg.nombreReponseAdversaire) {
       if(msg.score > myScore) {
         socket.emit("afficher-resultat", {
-          gagnant: msg.expediteur
+          gagnant: msg.expediteur,
+          perdant: socket.id,
+          scoreGagnant: msg.score,
+          scorePerdant: myScore
         });
       } else if(msg.score < myScore) {
         socket.emit("afficher-resultat", {
-          gagnant: socket.id
+          gagnant: socket.id,
+          perdant: msg.expediteur,
+          scoreGagnant: myScore,
+          scorePerdant: msg.score
         });
       }
     }
@@ -211,4 +217,25 @@ socket.on("afficher-resultat", (msg) => {
   } else {
     document.querySelector("#messagePerdre").style.display = "block";
   }
+  let headers = {
+    "Content-Type": "application/json",
+  }
+  fetch(URL_API, {
+    method: "PUT",
+    headers: headers,
+    body:  JSON.stringify({
+      socketId: msg.gagnant,
+      score: msg.scoreGagnant,
+      isConnected: false
+    })
+  });
+  fetch(URL_API, {
+    method: "PUT",
+    headers: headers,
+    body:  JSON.stringify({
+      socketId: msg.perdant,
+      score: msg.scorePerdant,
+      isConnected: false
+    })
+  })
 });

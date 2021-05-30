@@ -34,3 +34,26 @@ exports.readUsers = function (req, res) {
     res.status(200).json(users);
   });
 }
+
+exports.updateUser = function (req, res) {
+  User.findOne({ socketId: req.body.socketId }, (err, user) => {
+    if(err) {
+      res.status(500).json({
+        message : 'le serveur a rencontré un problème inattendu'
+      });
+    }
+    user.score = req.body.score;
+    user.isConnected = req.body.isConnected;
+    user.save()
+    .then(() => {
+      res.status(201).json({
+        message : 'l\'utiliateur est bien enregistré'
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message : 'le serveur a rencontré un problème inattendu'
+      });
+    })
+  });
+}
