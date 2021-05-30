@@ -10,29 +10,31 @@
 </head>
 <body>
 
-  <div>definition de jeu</div>
+  <div id="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex labore ad consequuntur magni consectetur dolorum mollitia, ab nesciunt, voluptas corrupti alias laborum beatae architecto cumque consequatur repellat dolores, obcaecati nobis!</div>
 
-  <div id="infoJoueur"></div>
+  <div id="info">
+    <div id="infoJoueur"></div>
+    <div id="infoAdversaire"></div>
+  </div>
 
-  <div id="infoAdversaire"></div>
-
-  <div id="pseudo-existe-deja" class="displayNone">
+  <div id="pseudo-existe-deja" class="displayNone error-msg">
     pseudo-existe-deja.
   </div>
 
   <div id="form-pseudo">
     <p>choisez un pseudonyme :</p>
     <input type="text" id="name" />
+    <br/>
     <button id="seconnecter">Se connecter</button>
   </div>
 
-  <div id="message-si-liste-vide" class="displayNone">
+  <div id="message-si-liste-vide" class="displayNone error-msg">
     Aucun utilisateurs n'est connectes.
   </div>
 
   <ul id="list-users"></ul>
 
-  <div id="message-viens-jour"></div>
+  <div id="message-viens-jour" class="info-msg"></div>
 
   <div id="form-pour-proposer" class="displayNone" >
     <p>Proposez une lettre :</p>
@@ -49,23 +51,21 @@
     <button id="envoyerNumeroPropose">Envoyer</button>
   </div>
 
-  <div id="attendreProposition" class="displayNone">
+  <div id="attendreProposition" class="displayNone info-msg">
     Attendez la proposition...
   </div>
 
-  <div id="attendreReponse" class="displayNone">
+  <div id="attendreReponse" class="displayNone info-msg">
     Attendez la reponse...
   </div>
 
-  <div id="messageGagner" class="displayNone">
+  <div id="messageGagner" class="displayNone info-msg">
     Vous avez gagne!
   </div>
 
-  <div id="messagePerdre" class="displayNone">
+  <div id="messagePerdre" class="displayNone info-msg">
     Vous avez perdu!
   </div>
-
-
 
   <script src="./script.js"></script>
 </body>

@@ -35,8 +35,8 @@ btnSeConnecter.addEventListener("click", () => {
       document.querySelector("#form-pseudo").style.display = "none";
       socket.emit("userconnect");
       let infoJoueur = `
-        <div>Name: ${name}</div>
-        <div id="scoreJoueur">Score: ${myScore}</div>
+        <img src="./images/chevalier.png" height="30" alt="avatar">
+        | ${name} | score: <span id="scoreJoueur">${myScore}</span>
       `;
       document.querySelector("#infoJoueur").innerHTML = infoJoueur;
       fetch(URL_API)
@@ -121,8 +121,7 @@ socket.on("vient-jouer", (msg) => {
       document.querySelector("#list-users").style.display = "none";
       document.querySelector("#form-pour-proposer").style.display = "block";
       let infoAdversaire = `
-        <div>Name: ${msg.expediteurName}</div>
-        <div id="scoreAdversaire">Score: 0</div>
+        score : <span id="scoreAdversaire">0</span> | ${msg.expediteurName} | <img src="./images/chevalier.png" height="30" alt="avatar">
       `;
       document.querySelector("#infoAdversaire").innerHTML = infoAdversaire;
       message.innerHTML = "";
@@ -147,8 +146,7 @@ btnEnvoyerLettreProposee.addEventListener("click", () => {
 socket.on("proposer-lettre", (msg) => {
   if(msg.expediteur !== socket.id) {
     let infoAdversaire = `
-      <div>Name: ${msg.expediteurName}</div>
-      <div id="scoreAdversaire">Score: ${msg.score}</div>
+      score : <span id="scoreAdversaire">${msg.score}</span> | ${msg.expediteurName} | <img src="./images/chevalier.png" height="30" alt="avatar">
     `;
     document.querySelector("#infoAdversaire").innerHTML = infoAdversaire;
     document.querySelector("#attendreProposition").style.display = "none";
@@ -166,9 +164,7 @@ btnEnvoyerNumeroPropose.addEventListener("click", () => {
   let index = parseInt(numeroPropose) - 1;
   if(LETTRES[index] == lettreADeviner) {
     myScore++;
-    document.querySelector("#scoreJoueur").innerHTML = `
-      Score: ${myScore}
-    `;
+    document.querySelector("#scoreJoueur").innerText = myScore;
   }
   socket.emit("proposer-numero", {
     expediteur: socket.id,
@@ -200,8 +196,7 @@ socket.on("proposer-numero", (msg) => {
       }
     }
     let infoAdversaire = `
-      <div>Name: ${msg.expediteurName}</div>
-      <div id="scoreAdversaire">Score: ${msg.score}</div>
+      score : <span id="scoreAdversaire">${msg.score}</span> | ${msg.expediteurName} | <img src="./images/chevalier.png" height="30" alt="avatar">
     `;
     document.querySelector("#infoAdversaire").innerHTML = infoAdversaire;
     document.querySelector("#attendreProposition").style.display = "block";
