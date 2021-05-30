@@ -2,6 +2,7 @@ const LETTRES = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"
 const URL_API = "http://192.168.1.186:3000"
 let myUserName = "";
 let suisJeConnecte = false;
+let myScore = 0;
 
 const socket = io.connect(URL_API);
 
@@ -32,6 +33,11 @@ btnSeConnecter.addEventListener("click", () => {
       suisJeConnecte = true;
       document.querySelector("#form-pseudo").style.display = "none";
       socket.emit("userconnect");
+      let infoJoueur = `
+        <div>Name: ${name}</div>
+        <div id="scoreJoueur">Score: ${myScore}</div>
+      `;
+      document.querySelector("#infoJoueur").innerHTML = infoJoueur;
       fetch(URL_API)
       .then(res => res.json())
       .then(users => {
@@ -113,6 +119,11 @@ socket.on("vient-jouer", (msg) => {
     setTimeout(() => {
       document.querySelector("#list-users").style.display = "none";
       document.querySelector("#form-pour-proposer").style.display = "block";
+      let infoAdversaire = `
+        <div>Name: ${msg.expediteurName}</div>
+        <div id="scoreAdversaire">Score: 0</div>
+      `;
+      document.querySelector("#infoAdversaire").innerHTML = infoAdversaire;
       message.innerHTML = "";
     }, 5000);
   }
@@ -124,6 +135,8 @@ btnEnvoyerLettreProposee.addEventListener("click", () => {
   let lettreProposee = document.querySelector("#lettreProposee").value;
   socket.emit("proposer-lettre", {
     expediteur: socket.id,
+    expediteurName: myUserName,
+    score: myScore, 
     lettreProposee: lettreProposee
   });
   document.querySelector("#form-pour-proposer").style.display = "none";
@@ -132,6 +145,11 @@ btnEnvoyerLettreProposee.addEventListener("click", () => {
 
 socket.on("proposer-lettre", (msg) => {
   if(msg.expediteur !== socket.id) {
+    let infoAdversaire = `
+      <div>Name: ${msg.expediteurName}</div>
+      <div id="scoreAdversaire">Score: ${msg.score}</div>
+    `;
+    document.querySelector("#infoAdversaire").innerHTML = infoAdversaire;
     document.querySelector("#attendreProposition").style.display = "none";
     document.querySelector("#form-pour-deviner").style.display = "block";
     document.querySelector("#lettreProposeeParAutre").innerHTML = msg.lettreProposee.toLowerCase();
