@@ -10,13 +10,13 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-const server = app.listen(port, () => {
+const server = app.listen(port, '0.0.0.0', () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
 
 const socketio = socket(server, {
   cors: {
-    origin: "http://localhost:8080",
+    origin: "http://192.168.1.186:8080",
     methods: ["GET", "POST"]
   }
 });
@@ -36,8 +36,10 @@ socketio.on('connection', (socket) => {
     socketio.emit('userconnect');
   });
   socket.on('vient-jouer', (msg) => {
-    console.log(msg)
     socketio.emit('vient-jouer', msg);
+  });
+  socket.on('proposer-lettre', (msg) => {
+    socketio.emit('proposer-lettre', msg);
   });
   socket.on('disconnect', () => {
     User.findOne({ socketId: socket.id }, (err, user) => {

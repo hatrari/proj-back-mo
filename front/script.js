@@ -1,7 +1,8 @@
+const URL_API = "http://192.168.1.186:3000"
 let myUserName = "";
 let suisJeConnecte = false;
 
-const socket = io.connect("http://localhost:3000");
+const socket = io.connect(URL_API);
 
 socket.on("userdisconnect", () => {
   updateListUsers();
@@ -12,7 +13,21 @@ socket.on("userconnect", () => {
 });
 
 socket.on("vient-jouer", (msg) => {
-  console.log(msg)
+  let message = document.querySelector("#message-viens-jour");
+  if(msg.expediteur !== socket.id && suisJeConnecte) {
+    let compteur = 5;
+    let intervalId = setInterval(() => {
+      if(compteur == 1) clearInterval(intervalId);
+      compteur--;
+      message.innerHTML = `${msg.expediteurName} vous invite a jouer. <br>
+      la partie commence dans <span>${compteur}</span>s`;
+    }, 1000);
+    setTimeout(() => {
+      document.querySelector("#list-users").style.display = "none";
+      document.querySelector("#jeu").style.display = "block";
+      message.innerHTML = "";
+    }, 5000);
+  }
 });
 
 let btnSeConnecter = document.querySelector("#seconnecter");
@@ -24,7 +39,7 @@ btnSeConnecter.addEventListener("click", () => {
   let headers = {
     "Content-Type": "application/json",
   }
-  fetch("http://localhost:3000/", {
+  fetch(URL_API, {
     method: "POST",
     headers: headers,
     body:  JSON.stringify(data)
@@ -43,7 +58,7 @@ btnSeConnecter.addEventListener("click", () => {
 function updateListUsers() {
   cacherMessage();
   let usersListElement = document.querySelector("#list-users");
-  fetch("http://localhost:3000/")
+  fetch(URL_API)
   .then(res => res.json())
   .then(users => {
     if(myUserName !== "") {
@@ -67,9 +82,30 @@ function cacherMessage() {
   document.querySelector("#message-si-liste-vide").style.display = "none";
 }
 
+
 function viensJouer(users) {
   let userConnected = users.filter(u => u.isConnected === true)[0];
   if(userConnected?.isConnected && suisJeConnecte) { // ecarter undefined et null + verifier si isConnected existe + moi je suis connecte
-    socket.emit("vient-jouer", {expediteur: socket.id, recepteur: userConnected.socketId});
+    socket.emit("vient-jouer", {
+      expediteur: socket.id,
+      expediteurName: myUserName,
+      recepteur: userConnected.socketId,
+    });
   }
 }
+
+let btnEnvoyerLettreProposee = document.querySelector("#envoyerLettreProposee");
+
+btnEnvoyerLettreProposee.addEventListener("click", () => {
+  let lettreProposee = document.querySelector("#lettreProposee").value;
+  socket.emit("proposer-lettre", {
+    expediteur: socket.id,
+    lettreProposee: lettreProposee
+  });
+});
+
+socket.on("proposer-lettre", (msg) => {
+  if(msg.expediteur !== socket.id) {
+    console.log(msg.lettreProposee)
+  }
+});
