@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./css/normalize.css">
+  <link rel="stylesheet" href="./css/skeleton.css">
+  <link rel="stylesheet" href="./css/style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
   <title>Document</title>
 </head>
 <body>
-  
+  <div class="container">
   <div id="description">Bienvenue sur cette application, il s’agit d’un jeu auquel <strong>deux</strong> utilisateurs peuvent s’y connecter simultanément. Chacun devrait choisir un pseudonyme, ensuite le dernier joueur connecté invite le premier à démarrer une partie. Ce jeu consiste à deviner le numéro correspondant à l’ordre alphabétique de la lettre proposée par le jouer adversaire. Par exemple, la lettre b correspond au numéro 2. </div>
 
   <div id="info">
@@ -22,17 +24,27 @@
   </div>
 
   <div id="form-pseudo">
-    <p>Choisissez un pseudonyme  :</p>
-    <input type="text" id="name" />
+    <h4>Choisissez un pseudonyme  :</h4>
+    <input type="text" id="name" class="button-primary u-full-width" />
     <br/>
-    <button id="seconnecter">Se connecter</button>
+    <input id="seconnecter" class="button-primary u-full-width" type="button" value="Se connecter">
   </div>
 
   <div id="message-si-liste-vide" class="displayNone error-msg">
     Aucun utilisateur n’est connecté pour entamer une partie, merci de patienter !
   </div>
+  
 
-  <ul id="list-users"></ul>
+  <table class="u-full-width">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody id="list-users">
+    </tbody>
+  </table>
 
   <div id="message-viens-jour" class="info-msg"></div>
 
@@ -67,6 +79,7 @@
     Aie Aie, vous avez perdu la partie ! tentez une prochaine fois 
   </div>
 
+  </div>
   <script src="./script.js"></script>
 </body>
 </html>

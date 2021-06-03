@@ -68,7 +68,10 @@ function updateListUsers() {
       document.querySelector("#message-si-liste-vide").style.display = "block";
     } else {
       let usersLis = users.map(user => `
-        <li class="user-item">${user.name}, score: ${user.score}</li>
+        <tr>
+          <td>${user.name}</td>
+          <td>${user.score}</td>
+        </tr>
       `)
       usersListElement.innerHTML = usersLis.join("");
     }
