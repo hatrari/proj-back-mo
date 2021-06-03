@@ -9,8 +9,8 @@
   <title>Document</title>
 </head>
 <body>
-
-  <div id="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex labore ad consequuntur magni consectetur dolorum mollitia, ab nesciunt, voluptas corrupti alias laborum beatae architecto cumque consequatur repellat dolores, obcaecati nobis!</div>
+  
+  <div id="description">Bienvenue sur cette application, il s’agit d’un jeu auquel <strong>deux</strong> utilisateurs peuvent s’y connecter simultanément. Chacun devrait choisir un pseudonyme, ensuite le dernier joueur connecté invite le premier à démarrer une partie. Ce jeu consiste à deviner le numéro correspondant à l’ordre alphabétique de la lettre proposée par le jouer adversaire. Par exemple, la lettre b correspond au numéro 2. </div>
 
   <div id="info">
     <div id="infoJoueur"></div>
@@ -22,14 +22,14 @@
   </div>
 
   <div id="form-pseudo">
-    <p>choisez un pseudonyme :</p>
+    <p>Choisissez un pseudonyme  :</p>
     <input type="text" id="name" />
     <br/>
     <button id="seconnecter">Se connecter</button>
   </div>
 
   <div id="message-si-liste-vide" class="displayNone error-msg">
-    Aucun utilisateurs n'est connectes.
+    Aucun utilisateur n’est connecté pour entamer une partie, merci de patienter !
   </div>
 
   <ul id="list-users"></ul>
@@ -37,14 +37,14 @@
   <div id="message-viens-jour" class="info-msg"></div>
 
   <div id="form-pour-proposer" class="displayNone" >
-    <p>Proposez une lettre :</p>
+    <p>Saisissez une lettre à devenir par votre adversaire :</p>
     <input type="text" id="lettreProposee" />
     <button id="envoyerLettreProposee">Envoyer</button>
   </div>
 
   <div id="form-pour-deviner" class="displayNone">
     <p>
-      Deviner le numero correspondant a la lettre
+      Deviner le numéro correspondant à la lettre
       <b id="lettreProposeeParAutre"></b>:
     </p>
     <input type="text" id="numeroPropose" />
@@ -52,19 +52,19 @@
   </div>
 
   <div id="attendreProposition" class="displayNone info-msg">
-    Attendez la proposition...
+    Veuillez attendre une proposition du joueur adversaire 
   </div>
 
   <div id="attendreReponse" class="displayNone info-msg">
-    Attendez la reponse...
+    Veuillez attendre une réponse du joueur adversaire
   </div>
 
   <div id="messageGagner" class="displayNone info-msg">
-    Vous avez gagne!
+    Bravo, vous avez gagné la partie !
   </div>
 
   <div id="messagePerdre" class="displayNone info-msg">
-    Vous avez perdu!
+    Aie Aie, vous avez perdu la partie ! tentez une prochaine fois 
   </div>
 
   <script src="./script.js"></script>

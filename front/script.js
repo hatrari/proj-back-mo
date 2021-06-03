@@ -1,5 +1,5 @@
 const LETTRES = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-const URL_API = "http://192.168.1.186:3000"
+const URL_API = "http://localhost:3000"
 let myUserName = "";
 let suisJeConnecte = false;
 let myScore = 0;
@@ -109,12 +109,12 @@ socket.on("vient-jouer", (msg) => {
   let message = document.querySelector("#message-viens-jour");
   if(msg.expediteur !== socket.id && suisJeConnecte) {
     let compteur = 5;
-    message.innerHTML = `${msg.expediteurName} vous invite a jouer. <br>
+    message.innerHTML = `${msg.expediteurName} vous invite à jouer. <br>
     la partie commence dans <span>${compteur}</span>s`;
     let intervalId = setInterval(() => {
       if(compteur == 1) clearInterval(intervalId);
       compteur--;
-      message.innerHTML = `${msg.expediteurName} vous invite a jouer. <br>
+      message.innerHTML = `${msg.expediteurName} vous invite à jouer. <br>
       la partie commence dans <span>${compteur}</span>s`;
     }, 1000);
     setTimeout(() => {
