@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const { use } = require('../routes/user');
 
 exports.createUser = function (req, res) {
   User.findOne({ socketId: req.body.socketId }, (err, user) => {
@@ -55,5 +56,37 @@ exports.updateUser = function (req, res) {
         message : 'le serveur a rencontré un problème inattendu'
       });
     })
+  });
+}
+
+exports.initUser = function (req, res) {
+  User.deleteMany({})
+  .then(async () => {
+    let user = new User();
+    user.socketId = "1";
+    user.name = "Ronaldo";
+    user.score = 3;
+    user.isConnected = false;
+    await user.save();
+    let user1 = new User();
+    user1.socketId = "2";
+    user1.name = "Messi";
+    user1.score = 5;
+    user1.isConnected = false;
+    await user1.save();
+    let user2 = new User();
+    user2.socketId = "3";
+    user2.name = "Raul";
+    user2.score = 4;
+    user2.isConnected = false;
+    await user2.save();
+    res.status(201).json({
+      message : 'l\'utiliateur est bien enregistré'
+    });
+  })
+  .catch((err) => {
+    res.status(500).json({
+      message : err
+    });
   });
 }

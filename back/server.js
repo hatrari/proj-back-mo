@@ -16,8 +16,7 @@ const server = app.listen(port, '0.0.0.0', () => {
 
 const socketio = socket(server, {
   cors: {
-    origin: "http://localhost:8080",
-    methods: ["GET", "POST"]
+    origin: "*"
   }
 });
 
