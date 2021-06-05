@@ -35,8 +35,9 @@ btnSeConnecter.addEventListener("click", () => {
       document.querySelector("#form-pseudo").style.display = "none";
       socket.emit("userconnect");
       let infoJoueur = `
-        <img src="./images/chevalier.png" height="30" alt="avatar">
-        | ${name} | score: <span id="scoreJoueur">${myScore}</span>
+        <img src="./images/chevalier.png" height="50" alt="avatar">
+        <div class="xlarge">${name}</div>
+        <div class="xlarge">score: <span id="scoreJoueur">${myScore}</span></div>
       `;
       document.querySelector("#infoJoueur").innerHTML = infoJoueur;
       fetch(URL_API)
@@ -67,6 +68,7 @@ function updateListUsers() {
     if(users.length == 0) {
       document.querySelector("#message-si-liste-vide").style.display = "block";
     } else {
+      users = users.slice(-10);
       let usersLis = users.map(user => `
         <tr>
           <td>${user.name}</td>
@@ -100,17 +102,22 @@ function viensJouer(users) {
       compteur--;
       message.innerHTML = `La partie commence dans <span>${compteur}</span>s`;
     }, 1000);
+    message.style.display = "block";
     setTimeout(() => {
       document.querySelector("#list-users").style.display = "none";
       document.querySelector("#attendreProposition").style.display = "block";
       message.innerHTML = "";
+      message.style.display = "none";
     }, 5000);
+  } else {
+    document.querySelector("#users-table").style.display = "block";
   }
 }
 
 socket.on("vient-jouer", (msg) => {
   let message = document.querySelector("#message-viens-jour");
   if(msg.expediteur !== socket.id && suisJeConnecte) {
+    document.querySelector("#users-table").style.display = "none";
     let compteur = 5;
     message.innerHTML = `${msg.expediteurName} vous invite à jouer. <br>
     la partie commence dans <span>${compteur}</span>s`;
@@ -120,14 +127,18 @@ socket.on("vient-jouer", (msg) => {
       message.innerHTML = `${msg.expediteurName} vous invite à jouer. <br>
       la partie commence dans <span>${compteur}</span>s`;
     }, 1000);
+    message.style.display = "block";
     setTimeout(() => {
       document.querySelector("#list-users").style.display = "none";
       document.querySelector("#form-pour-proposer").style.display = "block";
       let infoAdversaire = `
-        score : <span id="scoreAdversaire">0</span> | ${msg.expediteurName} | <img src="./images/chevalier.png" height="30" alt="avatar">
+        <img src="./images/chevalier.png" height="50" alt="avatar">
+        <div class="xlarge">${msg.expediteurName}</div>
+        <div class="xlarge">score: <span id="scoreAdversaire">0</span></div>
       `;
       document.querySelector("#infoAdversaire").innerHTML = infoAdversaire;
       message.innerHTML = "";
+      message.style.display = "none";
     }, 5000);
   }
 });
@@ -149,7 +160,9 @@ btnEnvoyerLettreProposee.addEventListener("click", () => {
 socket.on("proposer-lettre", (msg) => {
   if(msg.expediteur !== socket.id) {
     let infoAdversaire = `
-      score : <span id="scoreAdversaire">${msg.score}</span> | ${msg.expediteurName} | <img src="./images/chevalier.png" height="30" alt="avatar">
+      <img src="./images/chevalier.png" height="50" alt="avatar">
+      <div class="xlarge">${msg.expediteurName}</div>
+      <div class="xlarge">score: <span id="scoreAdversaire">${msg.score}</span></div>
     `;
     document.querySelector("#infoAdversaire").innerHTML = infoAdversaire;
     document.querySelector("#attendreProposition").style.display = "none";
@@ -199,7 +212,9 @@ socket.on("proposer-numero", (msg) => {
       }
     }
     let infoAdversaire = `
-      score : <span id="scoreAdversaire">${msg.score}</span> | ${msg.expediteurName} | <img src="./images/chevalier.png" height="30" alt="avatar">
+      <img src="./images/chevalier.png" height="50" alt="avatar">
+      <div class="xlarge">${msg.expediteurName}</div>
+      <div class="xlarge">score: <span id="scoreAdversaire">${msg.score}</span></div>
     `;
     document.querySelector("#infoAdversaire").innerHTML = infoAdversaire;
     document.querySelector("#attendreProposition").style.display = "block";
@@ -236,4 +251,9 @@ socket.on("afficher-resultat", (msg) => {
       isConnected: false
     })
   })
+});
+
+document.querySelector("#btn-jouer").addEventListener("click", () => {
+  document.querySelector("#description").style.display = "none";
+  document.querySelector("#form-pseudo").style.display = "block";
 });

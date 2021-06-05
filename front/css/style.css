@@ -2,3 +2,30 @@
   display: none;
 }
 
+.container {
+  margin-top: 40px;
+}
+
+.paragraphe-style {
+  background-color: azure;
+  border-radius: 5px;
+  padding: 20px;
+  font-size: medium;
+}
+
+#btn-jouer {
+  margin-top: 10px;
+}
+
+#info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.xlarge {
+  font-size: x-large; 
+}
+
+.topMargin20 {
+  margin-top: 20px;
+}

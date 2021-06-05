@@ -12,70 +12,76 @@
 </head>
 <body>
   <div class="container">
-  <div id="description">Bienvenue sur cette application, il s’agit d’un jeu auquel <strong>deux</strong> utilisateurs peuvent s’y connecter simultanément. Chacun devrait choisir un pseudonyme, ensuite le dernier joueur connecté invite le premier à démarrer une partie. Ce jeu consiste à deviner le numéro correspondant à l’ordre alphabétique de la lettre proposée par le jouer adversaire. Par exemple, la lettre b correspond au numéro 2. </div>
+  <div id="description" class="paragraphe-style">
+    Bienvenue sur cette application, il s’agit d’un jeu auquel <strong>deux</strong> utilisateurs peuvent s’y connecter simultanément. Chacun devrait choisir un pseudonyme, ensuite le dernier joueur connecté invite le premier à démarrer une partie. Ce jeu consiste à deviner le numéro correspondant à l’ordre alphabétique de la lettre proposée par le jouer adversaire. Par exemple, la lettre b correspond au numéro 2.
+    <br/>
+    <button id="btn-jouer" class="button-primary">jouer</button>
+  </div>
 
   <div id="info">
     <div id="infoJoueur"></div>
     <div id="infoAdversaire"></div>
   </div>
 
-  <div id="pseudo-existe-deja" class="displayNone error-msg">
+  <div id="pseudo-existe-deja" class="displayNone error-msg paragraphe-style">
     pseudo-existe-deja.
   </div>
 
-  <div id="form-pseudo">
+  <div id="form-pseudo" class="displayNone">
     <h4>Choisissez un pseudonyme  :</h4>
     <input type="text" id="name" class="button-primary u-full-width" />
     <br/>
     <input id="seconnecter" class="button-primary u-full-width" type="button" value="Se connecter">
   </div>
 
-  <div id="message-si-liste-vide" class="displayNone error-msg">
+  <div id="message-si-liste-vide" class="displayNone error-msg paragraphe-style">
     Aucun utilisateur n’est connecté pour entamer une partie, merci de patienter !
   </div>
   
+  <div id="users-table" class="topMargin20 displayNone">
+    <h2>Liste des utilisateurs</h2>
+    <table class="u-full-width">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody id="list-users">
+      </tbody>
+    </table>
+  </div>
 
-  <table class="u-full-width">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Score</th>
-      </tr>
-    </thead>
-    <tbody id="list-users">
-    </tbody>
-  </table>
+  <div id="message-viens-jour" class="displayNone paragraphe-style topMargin20"></div>
 
-  <div id="message-viens-jour" class="info-msg"></div>
-
-  <div id="form-pour-proposer" class="displayNone" >
-    <p>Saisissez une lettre à devenir par votre adversaire :</p>
+  <div id="form-pour-proposer" class="displayNone topMargin20" >
+    <h4>Saisissez une lettre à devenir par votre adversaire :</h4>
     <input type="text" id="lettreProposee" />
     <button id="envoyerLettreProposee">Envoyer</button>
   </div>
 
-  <div id="form-pour-deviner" class="displayNone">
-    <p>
+  <div id="form-pour-deviner" class="displayNone topMargin20">
+    <h4>
       Deviner le numéro correspondant à la lettre
       <b id="lettreProposeeParAutre"></b>:
-    </p>
+    </h4>
     <input type="text" id="numeroPropose" />
     <button id="envoyerNumeroPropose">Envoyer</button>
   </div>
 
-  <div id="attendreProposition" class="displayNone info-msg">
+  <div id="attendreProposition" class="displayNone paragraphe-style topMargin20">
     Veuillez attendre une proposition du joueur adversaire 
   </div>
 
-  <div id="attendreReponse" class="displayNone info-msg">
+  <div id="attendreReponse" class="displayNone paragraphe-style topMargin20">
     Veuillez attendre une réponse du joueur adversaire
   </div>
 
-  <div id="messageGagner" class="displayNone info-msg">
+  <div id="messageGagner" class="displayNone paragraphe-style topMargin20">
     Bravo, vous avez gagné la partie !
   </div>
 
-  <div id="messagePerdre" class="displayNone info-msg">
+  <div id="messagePerdre" class="displayNone paragraphe-style topMargin20">
     Aie Aie, vous avez perdu la partie ! tentez une prochaine fois 
   </div>
 
